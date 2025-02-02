@@ -220,6 +220,13 @@ body {
 }
 
 /* Controls */
+#controls {
+  margin-top: 18px;
+}
+#controls .control-row {
+  /* By default the buttons will stack vertically unless styled in media queries */
+  margin-bottom: 8px;
+}
 #controls button {
   padding: 9px 18px;
   font-size: 14px;
@@ -401,10 +408,24 @@ body {
     right: 12px;
   }
   
+  /* Increase button size and lay out controls in two horizontal rows */
+  #controls {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 18px;
+  }
+  #controls .control-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+  }
   #controls button {
-    padding: 8px 16px;
-    font-size: 12px;
-    margin: 4px;
+    flex: 1;
+    font-size: 18px;
+    padding: 12px 16px;
   }
   
   #message {

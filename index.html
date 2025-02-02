@@ -56,14 +56,18 @@
       <div id="player-hands"></div>
     </div>
 
+    <!-- Controls split into two rows -->
     <div id="controls">
-      <button id="deal-button">Deal</button>
-      <button id="hit-button" disabled>Hit</button>
-      <button id="stand-button" disabled>Stand</button>
-      <button id="double-button" disabled>Double Down</button>
-      <button id="split-button" disabled>Split</button>
-      <!-- Save Button -->
-      <button id="save-button">Save</button>
+      <div class="control-row" id="row-one">
+        <button id="deal-button">Deal</button>
+        <button id="hit-button" disabled>Hit</button>
+        <button id="stand-button" disabled>Stand</button>
+      </div>
+      <div class="control-row" id="row-two">
+        <button id="double-button" disabled>Double Down</button>
+        <button id="split-button" disabled>Split</button>
+        <button id="save-button">Save</button>
+      </div>
     </div>
 
     <div id="message"></div>
