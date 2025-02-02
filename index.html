@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Mobile optimization: ensure proper scaling on smartphones -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blackjack Game with Advanced Features</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Virtual deck icon -->
+  <div id="virtual-deck">🂠</div>
+
+  <h1>Garren's Blackjack Game</h1>
+  
+  <div id="game-area">
+    <div id="info-bar">
+      <div id="wallet">
+        <p>Balance: $<span id="balance">500</span></p>
+      </div>
+      <div id="num-decks">
+        <p>Number of Decks: <span id="deck-count">4</span></p>
+      </div>
+    </div>
+
+    <div id="betting-area">
+      <label for="bet-amount">Bet Amount ($5 minimum): </label>
+      <input type="number" id="bet-amount" value="5" min="5" step="5">
+    </div>
+
+    <div id="dealer-area">
+      <h2>Dealer's Hand</h2>
+      <div id="dealer-cards"></div>
+      <div id="dealer-score"></div>
+    </div>
+
+    <!-- Game Over Overlay (only one instance) -->
+    <div id="game-over-overlay">
+      <p>Game Over!</p>
+      <p>Starting Over...</p>
+    </div>
+
+    <div id="player-area">
+      <h2>Your Hand</h2>
+      <div id="player-hands"></div>
+    </div>
+
+    <div id="controls">
+      <button id="deal-button">Deal</button>
+      <button id="hit-button" disabled>Hit</button>
+      <button id="stand-button" disabled>Stand</button>
+      <button id="double-button" disabled>Double Down</button>
+      <button id="split-button" disabled>Split</button>
+      <!-- Save Button -->
+      <button id="save-button">Save</button>
+    </div>
+
+    <div id="message"></div>
+  </div>
+  
+  <!-- Subtle keyboard shortcuts hint -->
+  <p id="keyboard-shortcuts-hint" style="font-size: 12px; opacity: 0.7;">
+    Hold 'Q' to Display Keyboard Shortcuts
+  </p>
+  
+  <!-- Shuffling Animation Overlay -->
+  <div id="shuffle-overlay">
+    <div id="shuffle-animation"></div>
+    <p>Shuffling Decks...</p>
+  </div>
+  
+  <!-- Link to external JavaScript file (defer ensures the DOM is ready) -->
+  <script src="script.js" defer></script>
+</body>
+</html>

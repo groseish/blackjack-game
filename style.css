@@ -1,0 +1,338 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #006400;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+/* Game Area Container */
+#game-area {
+  margin: 18px auto;
+  width: 720px;
+  max-width: 95%;
+  background-color: #228B22;
+  padding: 18px;
+  border-radius: 10px;
+  position: relative;
+}
+
+/* Info Bar */
+#info-bar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+#wallet, #num-decks {
+  font-size: 18px;
+}
+
+/* Betting Area */
+#betting-area {
+  margin-bottom: 18px;
+  font-size: 16px;
+}
+#betting-area input {
+  width: 72px;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Dealer and Player Areas */
+#dealer-area,
+#player-area {
+  margin-bottom: 18px;
+  position: relative;
+}
+
+/* Dealer Cards Container */
+#dealer-cards {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 135px;
+  height: 135px;
+  overflow: hidden;
+  perspective: 720px;
+}
+
+/* Player Hands Container */
+#player-hands {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Player Cards Container */
+.player-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-height: 135px;
+  height: 135px;
+  overflow: hidden;
+  perspective: 720px;
+}
+
+/* Individual Card Styles with Flip Animation */
+.card {
+  width: 65px;
+  height: 86px;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  margin: 4.5px;
+  background-color: #fff;
+  color: #000;
+  display: inline-block;
+  line-height: 86px;
+  font-size: 22px;
+  opacity: 0;
+  transform: rotateY(90deg) scale(0.5);
+}
+.card.dealt {
+  animation: flipIn 0.5s ease-out forwards;
+}
+@keyframes flipIn {
+  0% {
+    opacity: 0;
+    transform: rotateY(90deg) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: rotateY(-10deg) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: rotateY(0deg) scale(1);
+  }
+}
+
+/* Virtual Deck with Pulse Animation */
+#virtual-deck {
+  position: fixed;
+  right: 18px;
+  top: 50%;
+  width: 65px;
+  height: 86px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #000;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Controls */
+#controls button {
+  padding: 9px 18px;
+  font-size: 14px;
+  margin: 4.5px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  background-color: #444;
+  color: white;
+  transition: transform 0.2s ease-out, background-color 0.2s ease-out;
+}
+#controls button:hover {
+  transform: scale(1.05);
+  background-color: #666;
+}
+
+/* Message Display with Fade In Animation */
+#message {
+  font-size: 22px;
+  margin-top: 18px;
+  white-space: pre-line;
+  animation: fadeIn 1s ease-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Individual Player Hand Container with Slide In */
+.player-hand {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideIn 0.5s ease-out;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.player-hand h3 {
+  margin-bottom: 5px;
+}
+
+/* Active Hand Highlight with Glow Animation */
+.active-hand {
+  border: 2px solid yellow;
+  padding: 5px;
+  border-radius: 5px;
+  animation: glow 1s infinite alternate;
+}
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px yellow;
+  }
+  to {
+    box-shadow: 0 0 20px yellow;
+  }
+}
+
+/* Shuffling Animation Overlay */
+#shuffle-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 100, 0, 0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  font-size: 22px;
+}
+#shuffle-animation {
+  width: 45px;
+  height: 45px;
+  border: 4.5px solid white;
+  border-top: 4.5px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 18px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Game Over Overlay */
+#game-over-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ff5555;
+  font-size: 43px;
+  opacity: 0;
+  transform: scale(0.45);
+  z-index: 10000;
+  pointer-events: none;
+}
+#game-over-overlay.active {
+  animation: gameOverAnimation 1.5s ease-out forwards;
+}
+@keyframes gameOverAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0.45) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08) rotate(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(0.9) rotate(0deg);
+  }
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+  
+  #game-area {
+    padding: 12px;
+  }
+  
+  #info-bar {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #info-bar > div {
+    margin-bottom: 8px;
+  }
+  
+  #betting-area {
+    font-size: 14px;
+  }
+  
+  #betting-area input {
+    width: 60px;
+    font-size: 14px;
+  }
+  
+  #dealer-cards, .player-cards {
+    min-height: 110px;
+    height: 110px;
+    perspective: 600px;
+  }
+  
+  .card {
+    width: 55px;
+    height: 73px;
+    line-height: 73px;
+    font-size: 18px;
+    margin: 4px;
+  }
+  
+  #virtual-deck {
+    width: 55px;
+    height: 73px;
+    font-size: 18px;
+    right: 12px;
+  }
+  
+  #controls button {
+    padding: 8px 16px;
+    font-size: 12px;
+    margin: 4px;
+  }
+  
+  #message {
+    font-size: 18px;
+    margin-top: 12px;
+  }
+  
+  #game-over-overlay {
+    font-size: 35px;
+  }
+}
