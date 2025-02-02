@@ -631,22 +631,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.getElementById('toggle-leaderboard');
     const leaderboardContainer = document.getElementById('leaderboard-container');
     
+    // When the toggle button is clicked, toggle the leaderboard's visibility.
     toggleButton.addEventListener('click', function(e) {
       e.stopPropagation();
-      // Toggle the visibility of the leaderboard
-      if (leaderboardContainer.style.display === 'none' || leaderboardContainer.style.display === '') {
-        leaderboardContainer.style.display = 'block';
-        // Add a one-time event listener to hide the leaderboard when clicking anywhere else
-        setTimeout(() => {
-          document.addEventListener('click', hideLeaderboard, { once: true });
-        }, 0);
-      } else {
+      if (leaderboardContainer.style.display === 'block') {
         leaderboardContainer.style.display = 'none';
+      } else {
+        leaderboardContainer.style.display = 'block';
       }
     });
     
-    function hideLeaderboard() {
-      leaderboardContainer.style.display = 'none';
-    }
+    // Hide the leaderboard if clicking anywhere outside the toggle button or leaderboard.
+    document.addEventListener('click', function(e) {
+      if (leaderboardContainer.style.display === 'block') {
+        if (!leaderboardContainer.contains(e.target) && e.target !== toggleButton) {
+          leaderboardContainer.style.display = 'none';
+        }
+      }
+    });
   }
 });
