@@ -91,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   async function checkAndUpdateLeaderboard() {
+    // Change threshold as needed; for testing you might lower it.
     if (balance < 501) return;
     
     const leaderboard = await fetchLeaderboard();
@@ -417,10 +418,24 @@ document.addEventListener('DOMContentLoaded', function() {
     moveToNextHand();
   }
   
+  // Updated to create a card that looks more realistic:
   function createCardElement(card, hidden = false) {
     const cardElement = document.createElement('div');
     cardElement.className = 'card';
-    cardElement.innerHTML = hidden ? '🂠' : card.name + card.suit;
+    if (hidden) {
+      // Card back design:
+      cardElement.innerHTML = `<div class="card-back">🂠</div>`;
+    } else {
+      // Determine text color based on suit
+      let color = (card.suit === '♥' || card.suit === '♦') ? 'red' : 'black';
+      cardElement.innerHTML = `
+        <div class="card-front" style="color: ${color};">
+          <div class="card-corner top-left">${card.name}${card.suit}</div>
+          <div class="card-middle">${card.suit}</div>
+          <div class="card-corner bottom-right">${card.name}${card.suit}</div>
+        </div>
+      `;
+    }
     return cardElement;
   }
   
