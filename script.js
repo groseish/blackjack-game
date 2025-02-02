@@ -16,7 +16,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyBXj3rQE2cnnIUoeK3o_YsxlV1fH59whWs",
   authDomain: "blackjack-backend-2d51c.firebaseapp.com",
   projectId: "blackjack-backend-2d51c",
-  storageBucket: "blackjack-backend-2d51c.firebasestorage.app", // ← Verify if this should be "blackjack-backend-2d51c.appspot.com"
+  storageBucket: "blackjack-backend-2d51c.firebasestorage.app",
   messagingSenderId: "319234201931",
   appId: "1:319234201931:web:13b7c567633d13690db0ce"
 };
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   async function checkAndUpdateLeaderboard() {
-    if (balance < 1000) return;
+    if (balance < 501) return;
     
     const leaderboard = await fetchLeaderboard();
     let lowestScore = leaderboard.length < 10 ? 0 : leaderboard[leaderboard.length - 1].balance;
