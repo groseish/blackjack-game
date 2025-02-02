@@ -623,4 +623,30 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Fetch and display the global leaderboard on page load
   fetchLeaderboard();
+  
+  // =====================================================
+  // MOBILE: TOGGLE LEADERBOARD FUNCTIONALITY
+  // =====================================================
+  if (window.innerWidth <= 768) {
+    const toggleButton = document.getElementById('toggle-leaderboard');
+    const leaderboardContainer = document.getElementById('leaderboard-container');
+    
+    toggleButton.addEventListener('click', function(e) {
+      e.stopPropagation();
+      // Toggle the visibility of the leaderboard
+      if (leaderboardContainer.style.display === 'none' || leaderboardContainer.style.display === '') {
+        leaderboardContainer.style.display = 'block';
+        // Add a one-time event listener to hide the leaderboard when clicking anywhere else
+        setTimeout(() => {
+          document.addEventListener('click', hideLeaderboard, { once: true });
+        }, 0);
+      } else {
+        leaderboardContainer.style.display = 'none';
+      }
+    });
+    
+    function hideLeaderboard() {
+      leaderboardContainer.style.display = 'none';
+    }
+  }
 });

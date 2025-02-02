@@ -8,6 +8,21 @@ body {
   padding: 0;
 }
 
+/* Toggle Leaderboard Button for Mobile */
+#toggle-leaderboard {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 1001;
+  padding: 8px 12px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: none; /* hidden by default, will be shown on mobile */
+}
+
 /* Leaderboard Styles */
 #leaderboard-container {
   position: fixed;
@@ -113,7 +128,6 @@ body {
   background-color: #fff;
   position: relative;
   overflow: hidden;
-  /* Remove line-height since we now use inner structure */
   transform: rotateY(90deg) scale(0.5);
   opacity: 0;
 }
@@ -400,5 +414,23 @@ body {
   
   #game-over-overlay {
     font-size: 35px;
+  }
+  
+  /* On mobile, show the toggle button and hide the leaderboard by default */
+  #toggle-leaderboard {
+    display: block;
+  }
+  
+  #leaderboard-container {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  #toggle-leaderboard {
+    display: none;
+  }
+  #leaderboard-container {
+    display: block !important;
   }
 }
