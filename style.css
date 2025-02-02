@@ -8,6 +8,33 @@ body {
   padding: 0;
 }
 
+/* Leaderboard Styles */
+#leaderboard-container {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 12px;
+  border-radius: 5px;
+  width: 250px;
+  color: white;
+  text-align: left;
+  z-index: 1000;
+}
+#leaderboard-container h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+#leaderboard {
+  list-style-type: decimal;
+  margin: 0;
+  padding-left: 20px;
+}
+#leaderboard li {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+
 /* Game Area Container */
 #game-area {
   margin: 18px auto;

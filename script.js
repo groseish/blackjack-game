@@ -1,4 +1,33 @@
+// Import the necessary Firebase modules
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  getDocs, 
+  query, 
+  orderBy, 
+  limit, 
+  serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+
+// Your Firebase configuration (double‑check these values!)
+const firebaseConfig = {
+  apiKey: "AIzaSyBXj3rQE2cnnIUoeK3o_YsxlV1fH59whWs",
+  authDomain: "blackjack-backend-2d51c.firebaseapp.com",
+  projectId: "blackjack-backend-2d51c",
+  storageBucket: "blackjack-backend-2d51c.firebasestorage.app", // ← Verify if this should be "blackjack-backend-2d51c.appspot.com"
+  messagingSenderId: "319234201931",
+  appId: "1:319234201931:web:13b7c567633d13690db0ce"
+};
+
+// Initialize Firebase and Firestore
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 document.addEventListener('DOMContentLoaded', function() {
+  console.log("DOM fully loaded – initializing game");
+
   // =====================================================
   // INITIAL SETUP & GLOBAL VARIABLES
   // =====================================================
@@ -42,9 +71,61 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
 
   // =====================================================
+  // GLOBAL LEADERBOARD FUNCTIONS USING FIRESTORE
+  // =====================================================
+  async function fetchLeaderboard() {
+    try {
+      const leaderboardRef = collection(db, "leaderboard");
+      const q = query(leaderboardRef, orderBy("balance", "desc"), limit(10));
+      const querySnapshot = await getDocs(q);
+      let leaderboard = [];
+      querySnapshot.forEach((doc) => {
+        leaderboard.push(doc.data());
+      });
+      updateLeaderboardUI(leaderboard);
+      return leaderboard;
+    } catch (error) {
+      console.error("Error fetching leaderboard:", error);
+      return [];
+    }
+  }
+
+  async function checkAndUpdateLeaderboard() {
+    if (balance < 1000) return;
+    
+    const leaderboard = await fetchLeaderboard();
+    let lowestScore = leaderboard.length < 10 ? 0 : leaderboard[leaderboard.length - 1].balance;
+    
+    if (leaderboard.length < 10 || balance > lowestScore) {
+      let name = prompt("Congratulations! You've made it to the leaderboard with a balance of $" + balance + "! Please enter your name:");
+      if (!name) name = "Anonymous";
+      try {
+        await addDoc(collection(db, "leaderboard"), {
+          name: name,
+          balance: balance,
+          timestamp: serverTimestamp()
+        });
+        await fetchLeaderboard();
+      } catch (error) {
+        console.error("Error updating leaderboard:", error);
+      }
+    }
+  }
+
+  function updateLeaderboardUI(leaderboard) {
+    const leaderboardEl = document.getElementById("leaderboard");
+    if (!leaderboardEl) return;
+    leaderboardEl.innerHTML = "";
+    leaderboard.forEach((entry) => {
+      const li = document.createElement("li");
+      li.innerText = `${entry.name} - $${entry.balance}`;
+      leaderboardEl.appendChild(li);
+    });
+  }
+
+  // =====================================================
   // UTILITY & KEYBOARD FUNCTIONS
   // =====================================================
-  
   function updateBalance() {
     document.getElementById('balance').innerText = balance;
   }
@@ -138,7 +219,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // =====================================================
   // DECK & GAME LOGIC FUNCTIONS
   // =====================================================
-  
   function createDeck() {
     deck = [];
     for (let d = 0; d < fullDeckCount; d++) {
@@ -184,8 +264,6 @@ document.addEventListener('DOMContentLoaded', function() {
       createDeck();
     }
     let card = deck.pop();
-    
-    // Track cards dealt and update deck count every 52 cards:
     cardsDealt++;
     if (cardsDealt >= 52) {
       currentRemainingDecks--;
@@ -195,12 +273,13 @@ document.addEventListener('DOMContentLoaded', function() {
         triggerShuffle();
       }
     }
-    
     return card;
   }
   
   function startGame() {
+    console.log("startGame called");
     betAmount = parseInt(document.getElementById('bet-amount').value);
+    console.log("betAmount:", betAmount);
     if (isNaN(betAmount) || betAmount < minBet) {
       alert(`Minimum bet is $${minBet}.`);
       return;
@@ -446,6 +525,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('message').innerText = messages.join('\n');
     document.getElementById('deal-button').disabled = false;
     document.getElementById('bet-amount').disabled = false;
+    checkAndUpdateLeaderboard();
     setTimeout(() => {
       if (balance < minBet) {
         triggerGameOver();
@@ -479,6 +559,7 @@ document.addEventListener('DOMContentLoaded', function() {
     renderHands(false);
     document.getElementById('deal-button').disabled = false;
     document.getElementById('bet-amount').disabled = false;
+    checkAndUpdateLeaderboard();
     if (balance < minBet) {
       triggerGameOver();
     }
@@ -511,14 +592,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // =====================================================
   // BUTTON EVENT LISTENERS & INITIALIZATION
   // =====================================================
-  
   document.getElementById('deal-button').addEventListener('click', startGame);
   document.getElementById('hit-button').addEventListener('click', hit);
   document.getElementById('stand-button').addEventListener('click', stand);
   document.getElementById('double-button').addEventListener('click', doubleDown);
   document.getElementById('split-button').addEventListener('click', split);
-  
-  // Save Button: Save the current balance to localStorage
   document.getElementById('save-button').addEventListener('click', function() {
     localStorage.setItem('playerBalance', balance);
     alert("Game saved! Your balance of $" + balance + " has been saved.");
@@ -527,4 +605,7 @@ document.addEventListener('DOMContentLoaded', function() {
   updateBalance();
   updateDeckCount();
   createDeck();
+  
+  // Fetch and display the global leaderboard on page load
+  fetchLeaderboard();
 });

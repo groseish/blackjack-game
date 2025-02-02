@@ -2,14 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Mobile optimization: ensure proper scaling on smartphones -->
+  <!-- Mobile optimization -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blackjack Game with Advanced Features</title>
   <link rel="stylesheet" href="style.css">
+  <!-- Removed duplicate Firebase initialization from here -->
 </head>
 <body>
   <!-- Virtual deck icon -->
   <div id="virtual-deck">🂠</div>
+
+  <!-- Global Leaderboard Container -->
+  <div id="leaderboard-container">
+    <h2>Leaderboard</h2>
+    <ol id="leaderboard"></ol>
+  </div>
 
   <h1>Garren's Blackjack Game</h1>
   
@@ -34,7 +41,7 @@
       <div id="dealer-score"></div>
     </div>
 
-    <!-- Game Over Overlay (only one instance) -->
+    <!-- Game Over Overlay -->
     <div id="game-over-overlay">
       <p>Game Over!</p>
       <p>Starting Over...</p>
@@ -69,7 +76,7 @@
     <p>Shuffling Decks...</p>
   </div>
   
-  <!-- Link to external JavaScript file (defer ensures the DOM is ready) -->
-  <script src="script.js" defer></script>
+  <!-- Load your game script as a module -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
