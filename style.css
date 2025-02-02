@@ -8,7 +8,7 @@ body {
   padding: 0;
 }
 
-/* Toggle Leaderboard Button for Mobile */
+/* Toggle Leaderboard Button for Mobile (default styling for desktop) */
 #toggle-leaderboard {
   position: fixed;
   top: 18px;
@@ -418,6 +418,8 @@ body {
   
   /* On mobile, show the toggle button and hide the leaderboard by default */
   #toggle-leaderboard {
+    position: static;
+    margin: 12px auto;
     display: block;
   }
   
