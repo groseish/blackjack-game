@@ -641,7 +641,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const tapMessage = document.createElement('div');
     tapMessage.className = 'tap-message';
-    tapMessage.innerText = 'Tap to continue';
+    tapMessage.innerText = 'You win!!!';
     overlay.appendChild(tapMessage);
     
     // When the overlay is tapped, remove it
@@ -670,7 +670,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const tapMessage = document.createElement('div');
     tapMessage.className = 'tap-message';
-    tapMessage.innerText = 'Tap to continue';
+    tapMessage.innerText = 'Dealer wins...';
     overlay.appendChild(tapMessage);
     
     // When the overlay is tapped, remove it
