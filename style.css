@@ -362,55 +362,68 @@ body {
   }
 }
 
-/* Win effect: gold dollar signs */
-.win-effect {
+/* NEW WIN OVERLAY */
+.win-overlay {
   position: fixed;
-  top: 40%;
-  left: -100px;
-  font-size: 48px;
-  color: gold;
-  opacity: 1;
-  pointer-events: none;
-  animation: winAnimation 1s ease-out forwards;
-  z-index: 11000; /* Increased z-index so it appears above all overlays */
-}
-@keyframes winAnimation {
-  0% {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(120vw);
-    opacity: 0;
-  }
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 12000;
+  cursor: pointer;
 }
 
-/* Lose effect: big red X */
-.lose-effect {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0);
-  font-size: 96px;
-  color: red;
-  opacity: 1;
-  pointer-events: none;
-  animation: loseAnimation 0.8s ease-out forwards;
-  z-index: 11000; /* Increased z-index */
+.win-overlay .emoji-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
-@keyframes loseAnimation {
-  0% {
-    transform: translate(-50%, -50%) scale(0);
-    opacity: 1;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.5);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0;
-  }
+
+.win-overlay .emoji-container span {
+  font-size: 3em;
+}
+
+.win-overlay .tap-message {
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+/* NEW LOSE OVERLAY */
+.lose-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 12000;
+  cursor: pointer;
+}
+
+.lose-overlay .emoji-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.lose-overlay .emoji-container span {
+  font-size: 5em;
+}
+
+.lose-overlay .tap-message {
+  font-size: 2em;
+  margin-top: 20px;
 }
 
 /* Responsive Design for Mobile */

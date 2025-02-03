@@ -543,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('deal-button').disabled = false;
     document.getElementById('bet-amount').disabled = false;
     
-    // Compute net change for the round and flash the appropriate effect.
+    // Compute net change for the round and trigger the appropriate effect.
     let net = balance - roundStartingBalance;
     if (net > 0) {
       flashWinEffect();
@@ -623,25 +623,62 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 2000);
   }
   
-  // Flash effect functions for win and loss
+  // NEW WIN OVERLAY Function:
   function flashWinEffect() {
-    const winElem = document.createElement('div');
-    winElem.className = 'win-effect';
-    winElem.innerText = '💰💰💰';
-    document.body.appendChild(winElem);
-    setTimeout(() => {
-      winElem.remove();
-    }, 1000);
+    // Create persistent win overlay filled with money bag emojis
+    const overlay = document.createElement('div');
+    overlay.className = 'win-overlay';
+    
+    const emojiContainer = document.createElement('div');
+    emojiContainer.className = 'emoji-container';
+    // Fill with several money bag emojis (e.g., 30 copies)
+    for (let i = 0; i < 30; i++) {
+      const span = document.createElement('span');
+      span.innerText = '💰';
+      emojiContainer.appendChild(span);
+    }
+    overlay.appendChild(emojiContainer);
+    
+    const tapMessage = document.createElement('div');
+    tapMessage.className = 'tap-message';
+    tapMessage.innerText = 'Tap to continue';
+    overlay.appendChild(tapMessage);
+    
+    // When the overlay is tapped, remove it
+    overlay.addEventListener('click', () => {
+      overlay.remove();
+    });
+    
+    document.body.appendChild(overlay);
   }
   
+  // NEW LOSE OVERLAY Function:
   function flashLoseEffect() {
-    const loseElem = document.createElement('div');
-    loseElem.className = 'lose-effect';
-    loseElem.innerText = '❌';
-    document.body.appendChild(loseElem);
-    setTimeout(() => {
-      loseElem.remove();
-    }, 800);
+    // Create persistent lose overlay filled with giant red X's
+    const overlay = document.createElement('div');
+    overlay.className = 'lose-overlay';
+    
+    const emojiContainer = document.createElement('div');
+    emojiContainer.className = 'emoji-container';
+    // Fill with several red X's (e.g., 20 copies)
+    for (let i = 0; i < 20; i++) {
+      const span = document.createElement('span');
+      span.innerText = '❌';
+      emojiContainer.appendChild(span);
+    }
+    overlay.appendChild(emojiContainer);
+    
+    const tapMessage = document.createElement('div');
+    tapMessage.className = 'tap-message';
+    tapMessage.innerText = 'Tap to continue';
+    overlay.appendChild(tapMessage);
+    
+    // When the overlay is tapped, remove it
+    overlay.addEventListener('click', () => {
+      overlay.remove();
+    });
+    
+    document.body.appendChild(overlay);
   }
   
   // =====================================================
