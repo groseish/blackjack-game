@@ -243,10 +243,11 @@ body {
   background-color: #666;
 }
 
-/* Message Display with Fade In Animation */
+/* Message Display with Fade In Animation and reserved space */
 #message {
+  min-height: 40px;
   font-size: 22px;
-  margin-top: 18px;
+  margin: 18px 0;
   white-space: pre-line;
   animation: fadeIn 1s ease-out;
 }
@@ -357,6 +358,59 @@ body {
   100% {
     opacity: 1;
     transform: scale(0.9) rotate(0deg);
+  }
+}
+
+/* Win effect: gold dollar signs */
+.win-effect {
+  position: fixed;
+  top: 40%;
+  left: -100px;
+  font-size: 48px;
+  color: gold;
+  opacity: 1;
+  pointer-events: none;
+  animation: winAnimation 1s ease-out forwards;
+  z-index: 2000;
+}
+
+@keyframes winAnimation {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120vw);
+    opacity: 0;
+  }
+}
+
+/* Lose effect: big red X */
+.lose-effect {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 96px;
+  color: red;
+  opacity: 1;
+  pointer-events: none;
+  animation: loseAnimation 0.8s ease-out forwards;
+  z-index: 2000;
+}
+
+@keyframes loseAnimation {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
   }
 }
 

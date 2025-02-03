@@ -52,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
   let activeHandIndex = 0;
   let isDoubleDown = false;
   let dealerShouldReveal = false;
+  
+  // Variable to track balance at start of round for win/lose effect calculations
+  let roundStartingBalance = 0;
 
   const suits = ['♠', '♥', '♦', '♣'];
   const values = [
@@ -91,7 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   async function checkAndUpdateLeaderboard() {
-    // Change threshold as needed; for testing you might lower it.
     if (balance < 501) return;
     
     const leaderboard = await fetchLeaderboard();
@@ -313,6 +315,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('deal-button').disabled = true;
     document.getElementById('bet-amount').disabled = true;
     
+    // Set round starting balance before subtracting bet(s)
+    roundStartingBalance = balance;
+    
     balance -= betAmount;
     updateBalance();
     
@@ -418,15 +423,12 @@ document.addEventListener('DOMContentLoaded', function() {
     moveToNextHand();
   }
   
-  // Updated to create a card that looks more realistic:
   function createCardElement(card, hidden = false) {
     const cardElement = document.createElement('div');
     cardElement.className = 'card';
     if (hidden) {
-      // Card back design:
       cardElement.innerHTML = `<div class="card-back">🂠</div>`;
     } else {
-      // Determine text color based on suit
       let color = (card.suit === '♥' || card.suit === '♦') ? 'red' : 'black';
       cardElement.innerHTML = `
         <div class="card-front" style="color: ${color};">
@@ -540,6 +542,15 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('message').innerText = messages.join('\n');
     document.getElementById('deal-button').disabled = false;
     document.getElementById('bet-amount').disabled = false;
+    
+    // Calculate net change for the round and flash the appropriate effect.
+    let net = balance - roundStartingBalance;
+    if (net > 0) {
+      flashWinEffect();
+    } else if (net < 0) {
+      flashLoseEffect();
+    }
+    
     checkAndUpdateLeaderboard();
     setTimeout(() => {
       if (balance < minBet) {
@@ -575,6 +586,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('deal-button').disabled = false;
     document.getElementById('bet-amount').disabled = false;
     checkAndUpdateLeaderboard();
+    
+    let net = balance - roundStartingBalance;
+    if (net > 0) {
+      flashWinEffect();
+    } else if (net < 0) {
+      flashLoseEffect();
+    }
+    
     if (balance < minBet) {
       triggerGameOver();
     }
@@ -604,6 +623,27 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 2000);
   }
   
+  // Flash effect functions for win and loss
+  function flashWinEffect() {
+    const winElem = document.createElement('div');
+    winElem.className = 'win-effect';
+    winElem.innerText = '💰💰💰';
+    document.body.appendChild(winElem);
+    setTimeout(() => {
+      winElem.remove();
+    }, 1000);
+  }
+  
+  function flashLoseEffect() {
+    const loseElem = document.createElement('div');
+    loseElem.className = 'lose-effect';
+    loseElem.innerText = '❌';
+    document.body.appendChild(loseElem);
+    setTimeout(() => {
+      loseElem.remove();
+    }, 800);
+  }
+  
   // =====================================================
   // BUTTON EVENT LISTENERS & INITIALIZATION
   // =====================================================
@@ -630,8 +670,6 @@ document.addEventListener('DOMContentLoaded', function() {
   if (window.innerWidth <= 768) {
     const toggleButton = document.getElementById('toggle-leaderboard');
     const leaderboardContainer = document.getElementById('leaderboard-container');
-    
-    // When the toggle button is clicked, toggle the leaderboard's visibility.
     toggleButton.addEventListener('click', function(e) {
       e.stopPropagation();
       if (leaderboardContainer.style.display === 'block') {
@@ -641,7 +679,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // Hide the leaderboard if clicking anywhere outside the toggle button or leaderboard.
     document.addEventListener('click', function(e) {
       if (leaderboardContainer.style.display === 'block') {
         if (!leaderboardContainer.contains(e.target) && e.target !== toggleButton) {
