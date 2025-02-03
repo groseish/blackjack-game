@@ -527,6 +527,7 @@ body {
   #leaderboard-container {
     width: 200px;
     padding: 8px;
+    display: none;  /* Hide leaderboard by default on mobile */
   }
 }
 

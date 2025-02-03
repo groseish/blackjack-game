@@ -641,7 +641,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const tapMessage = document.createElement('div');
     tapMessage.className = 'tap-message';
-    tapMessage.innerText = 'You win!!!';
+    tapMessage.innerText = 'Tap to continue';
     overlay.appendChild(tapMessage);
     
     // When the overlay is tapped, remove it
@@ -670,7 +670,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const tapMessage = document.createElement('div');
     tapMessage.className = 'tap-message';
-    tapMessage.innerText = 'Dealer wins...';
+    tapMessage.innerText = 'Tap to continue';
     overlay.appendChild(tapMessage);
     
     // When the overlay is tapped, remove it
@@ -679,6 +679,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     document.body.appendChild(overlay);
+  }
+  
+  // =====================================================
+  // MOBILE: TOGGLE LEADERBOARD FUNCTIONALITY
+  // =====================================================
+  if (window.innerWidth <= 768) {
+    const toggleButton = document.getElementById('toggle-leaderboard');
+    const leaderboardContainer = document.getElementById('leaderboard-container');
+    
+    // Show/hide leaderboard when toggle button is pressed
+    toggleButton.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (window.getComputedStyle(leaderboardContainer).display === 'block') {
+        leaderboardContainer.style.display = 'none';
+      } else {
+        leaderboardContainer.style.display = 'block';
+      }
+    });
+    
+    // Tap anywhere on the screen to hide the leaderboard if it is visible
+    document.addEventListener('click', function(e) {
+      if (window.getComputedStyle(leaderboardContainer).display === 'block') {
+        if (!leaderboardContainer.contains(e.target) && e.target !== toggleButton) {
+          leaderboardContainer.style.display = 'none';
+        }
+      }
+    });
   }
   
   // =====================================================
@@ -700,28 +727,4 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Fetch and display the global leaderboard on page load
   fetchLeaderboard();
-  
-  // =====================================================
-  // MOBILE: TOGGLE LEADERBOARD FUNCTIONALITY
-  // =====================================================
-  if (window.innerWidth <= 768) {
-    const toggleButton = document.getElementById('toggle-leaderboard');
-    const leaderboardContainer = document.getElementById('leaderboard-container');
-    toggleButton.addEventListener('click', function(e) {
-      e.stopPropagation();
-      if (leaderboardContainer.style.display === 'block') {
-        leaderboardContainer.style.display = 'none';
-      } else {
-        leaderboardContainer.style.display = 'block';
-      }
-    });
-    
-    document.addEventListener('click', function(e) {
-      if (leaderboardContainer.style.display === 'block') {
-        if (!leaderboardContainer.contains(e.target) && e.target !== toggleButton) {
-          leaderboardContainer.style.display = 'none';
-        }
-      }
-    });
-  }
 });
