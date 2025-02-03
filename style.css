@@ -224,7 +224,6 @@ body {
   margin-top: 18px;
 }
 #controls .control-row {
-  /* By default the buttons will stack vertically unless styled in media queries */
   margin-bottom: 8px;
 }
 #controls button {
@@ -243,9 +242,11 @@ body {
   background-color: #666;
 }
 
-/* Message Display with Fade In Animation and reserved space */
+/* Message Display – fixed height to reserve space and prevent layout jumps */
 #message {
-  min-height: 40px;
+  height: 40px;
+  line-height: 40px;
+  overflow: hidden;
   font-size: 22px;
   margin: 18px 0;
   white-space: pre-line;
@@ -371,9 +372,8 @@ body {
   opacity: 1;
   pointer-events: none;
   animation: winAnimation 1s ease-out forwards;
-  z-index: 2000;
+  z-index: 11000; /* Increased z-index so it appears above all overlays */
 }
-
 @keyframes winAnimation {
   0% {
     transform: translateX(0);
@@ -396,9 +396,8 @@ body {
   opacity: 1;
   pointer-events: none;
   animation: loseAnimation 0.8s ease-out forwards;
-  z-index: 2000;
+  z-index: 11000; /* Increased z-index */
 }
-
 @keyframes loseAnimation {
   0% {
     transform: translate(-50%, -50%) scale(0);

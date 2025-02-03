@@ -543,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('deal-button').disabled = false;
     document.getElementById('bet-amount').disabled = false;
     
-    // Calculate net change for the round and flash the appropriate effect.
+    // Compute net change for the round and flash the appropriate effect.
     let net = balance - roundStartingBalance;
     if (net > 0) {
       flashWinEffect();
