@@ -617,7 +617,7 @@ document.addEventListener('DOMContentLoaded', function() {
           triggerGameOver();
         }
       }, 100);
-    }, 2000); // 2-second delay
+    }, 1000); // 1-second delay
   }
   
   function checkForBlackjack() {
