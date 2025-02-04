@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			timestamp: serverTimestamp()
 		  });
 		  if (highScoreSubmittedOnce) {
-			alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`);
+			alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard! test1`);
 		  } else {
 			highScoreSubmittedOnce = true;
 		  }
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			  timestamp: serverTimestamp()
 			});
 			if (highScoreSubmittedOnce) {
-			  alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`);
+			  alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard! test2`);
 			} else {
 			  highScoreSubmittedOnce = true;
 			}
