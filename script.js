@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // Global variable for the player's name.
   // Try to load from localStorage in case they've already entered it.
   let playerName = localStorage.getItem('playerName') || "";
+  // Global flag to know if a high score submission has already occurred
+  let highScoreSubmittedOnce = playerName ? true : false;
 
   const suits = ['♠', '♥', '♦', '♣'];
   const values = [
@@ -101,24 +103,37 @@ document.addEventListener('DOMContentLoaded', function() {
     // Only check if the balance is at least 1000.
     if (balance < 1000) return;
     
-    // If playerName is not set, ask for it now and store it.
+    // If playerName is not set, prompt for it now, but do not immediately alert.
     if (!playerName) {
       playerName = prompt("Congratulations! You've made it to the leaderboard with a balance of $" + balance + "! Please enter your name:");
       if (!playerName) playerName = "Anonymous";
       localStorage.setItem('playerName', playerName);
+      highScoreSubmittedOnce = false;  // This is the first submission.
     }
     
     const leaderboard = await fetchLeaderboard();
-    let lowestScore = leaderboard.length < 10 ? 0 : leaderboard[leaderboard.length - 1].balance;
+    let lowestScore;
+    if (leaderboard.length < 10) {
+      // Require a minimum high score of $1000 even if the leaderboard is not full.
+      lowestScore = 1000;
+    } else {
+      lowestScore = leaderboard[leaderboard.length - 1].balance;
+    }
     
-    if (leaderboard.length < 10 || balance > lowestScore) {
+    if (balance > lowestScore) {
       try {
         await addDoc(collection(db, "leaderboard"), {
           name: playerName,
           balance: balance,
           timestamp: serverTimestamp()
         });
-        alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`);
+        // Only alert if this is not the very first high score submission.
+        if (highScoreSubmittedOnce) {
+          alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`);
+        } else {
+          // First submission—do not alert, then mark subsequent submissions.
+          highScoreSubmittedOnce = true;
+        }
         await fetchLeaderboard();
       } catch (error) {
         console.error("Error updating leaderboard:", error);
@@ -652,6 +667,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const tapMessage = document.createElement('div');
     tapMessage.className = 'tap-message';
+    // Only show the alert message for subsequent high scores.
     tapMessage.innerText = `${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`;
     overlay.appendChild(tapMessage);
     
