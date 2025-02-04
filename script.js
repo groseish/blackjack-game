@@ -99,47 +99,70 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  async function checkAndUpdateLeaderboard() {
-    // Only check if the balance is at least 1000.
-    if (balance < 1000) return;
-    
-    // If playerName is not set, prompt for it now, but do not immediately alert.
-    if (!playerName) {
-      playerName = prompt("Congratulations! You've made it to the leaderboard with a balance of $" + balance + "! Please enter your name:");
-      if (!playerName) playerName = "Anonymous";
-      localStorage.setItem('playerName', playerName);
-      highScoreSubmittedOnce = false;  // This is the first submission.
-    }
-    
-    const leaderboard = await fetchLeaderboard();
-    let lowestScore;
-    if (leaderboard.length < 10) {
-      // Require a minimum high score of $1000 even if the leaderboard is not full.
-      lowestScore = 1000;
-    } else {
-      lowestScore = leaderboard[leaderboard.length - 1].balance;
-    }
-    
-    if (balance > lowestScore) {
-      try {
-        await addDoc(collection(db, "leaderboard"), {
-          name: playerName,
-          balance: balance,
-          timestamp: serverTimestamp()
-        });
-        // Only alert if this is not the very first high score submission.
-        if (highScoreSubmittedOnce) {
-          alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`);
-        } else {
-          // First submission—do not alert, then mark subsequent submissions.
-          highScoreSubmittedOnce = true;
-        }
-        await fetchLeaderboard();
-      } catch (error) {
-        console.error("Error updating leaderboard:", error);
-      }
-    }
-  }
+	async function checkAndUpdateLeaderboard() {
+	  // Only check if the balance is at least 1000.
+	  if (balance < 1000) return;
+	  
+	  // If playerName is not set, prompt for it now and store it (first submission).
+	  if (!playerName) {
+		playerName = prompt(
+		  "Congratulations! You've made it to the leaderboard with a balance of $" +
+			balance +
+			"! Please enter your name:"
+		);
+		if (!playerName) playerName = "Anonymous";
+		localStorage.setItem('playerName', playerName);
+		highScoreSubmittedOnce = false; // This is the first submission.
+	  }
+	  
+	  const leaderboard = await fetchLeaderboard();
+	  
+	  // If there are fewer than 10 entries, use $1000 as the minimum threshold.
+	  if (leaderboard.length < 10) {
+		if (balance >= 1000) {
+		  try {
+			await addDoc(collection(db, "leaderboard"), {
+			  name: playerName,
+			  balance: balance,
+			  timestamp: serverTimestamp()
+			});
+			// Only show the alert for subsequent submissions.
+			if (highScoreSubmittedOnce) {
+			  alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`);
+			} else {
+			  highScoreSubmittedOnce = true;
+			}
+			await fetchLeaderboard();
+		  } catch (error) {
+			console.error("Error updating leaderboard:", error);
+		  }
+		}
+	  } else {
+		// Leaderboard is full: sort it descending and determine the lowest (10th) score.
+		leaderboard.sort((a, b) => b.balance - a.balance);
+		const lowestScore = leaderboard[leaderboard.length - 1].balance;
+		
+		// Only add a new score if the player's balance is higher than the current lowest.
+		if (balance > lowestScore) {
+		  try {
+			await addDoc(collection(db, "leaderboard"), {
+			  name: playerName,
+			  balance: balance,
+			  timestamp: serverTimestamp()
+			});
+			if (highScoreSubmittedOnce) {
+			  alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`);
+			} else {
+			  highScoreSubmittedOnce = true;
+			}
+			await fetchLeaderboard();
+		  } catch (error) {
+			console.error("Error updating leaderboard:", error);
+		  }
+		}
+	  }
+	}
+
 
   function updateLeaderboardUI(leaderboard) {
     const leaderboardEl = document.getElementById("leaderboard");
