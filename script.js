@@ -575,7 +575,10 @@ document.addEventListener('DOMContentLoaded', function() {
       await animateCardDeal(cardElement, dealerCardsDiv, 0);
       document.getElementById('dealer-score').innerText = 'Score: ' + dealerScore;
     }
-    determineWinners();
+	
+	setTimeout(() => {
+      determineWinners();
+	}, 500); // .5-second delay
   }
   
   function determineWinners() {
@@ -605,19 +608,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Compute net change for the round.
     let net = balance - roundStartingBalance;
     // Delay the win/lose effects so the player has time to see the dealer's final score.
+
+    if (net > 0) {
+	  flashWinEffect();
+    } else if (net < 0) {
+	  flashLoseEffect();
+    }
+    checkAndUpdateLeaderboard();
     setTimeout(() => {
-      if (net > 0) {
-        flashWinEffect();
-      } else if (net < 0) {
-        flashLoseEffect();
-      }
-      checkAndUpdateLeaderboard();
-      setTimeout(() => {
-        if (balance < minBet) {
-          triggerGameOver();
-        }
-      }, 100);
-    }, 500); // .5-second delay
+	  if (balance < minBet) {
+	    triggerGameOver();
+	  }
+    }, 100);
   }
   
   
