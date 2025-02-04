@@ -602,20 +602,22 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('deal-button').disabled = false;
     document.getElementById('bet-amount').disabled = false;
     
-    // Compute net change for the round and trigger the appropriate effect.
+    // Compute net change for the round.
     let net = balance - roundStartingBalance;
-    if (net > 0) {
-      flashWinEffect();
-    } else if (net < 0) {
-      flashLoseEffect();
-    }
-    
-    checkAndUpdateLeaderboard();
+    // Delay the win/lose effects so the player has time to see the dealer's final score.
     setTimeout(() => {
-      if (balance < minBet) {
-        triggerGameOver();
+      if (net > 0) {
+        flashWinEffect();
+      } else if (net < 0) {
+        flashLoseEffect();
       }
-    }, 100);
+      checkAndUpdateLeaderboard();
+      setTimeout(() => {
+        if (balance < minBet) {
+          triggerGameOver();
+        }
+      }, 100);
+    }, 2000); // 2-second delay
   }
   
   function checkForBlackjack() {
