@@ -238,21 +238,16 @@ body {
 }
 
 /* --- Second Row: Double Down and Split --- */
-/* Use a pseudo-element to add a dummy third item so that both rows have three items */
 #row-two {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   gap: 10px;
 }
 #row-two button {
-  flex: 1;
+  /* Keep the original centered layout without forcing full width */
   font-size: 12px;
   padding: 6px 8px;
   margin: 2px;
-}
-#row-two::after {
-  content: "";
-  flex: 1;
 }
 
 /* Global button styling (for non-responsive defaults) */
