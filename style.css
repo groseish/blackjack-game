@@ -242,6 +242,18 @@ body {
   background-color: #666;
 }
 
+/* Hide the Save button */
+#save-button {
+display: none;
+}
+
+/* Center the Double Down and Split buttons in the second row */
+#row-two {
+display: flex;
+justify-content: center;
+gap: 10px; /* Adjust gap as needed */
+}
+
 /* Message Display – fixed height to reserve space and prevent layout jumps */
 #message {
   height: 40px;
