@@ -27,6 +27,8 @@ const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', function() {
   console.log("DOM fully loaded – initializing game");
+  
+  localStorage.removeItem('playerName');
 
   // =====================================================
   // INITIAL SETUP & GLOBAL VARIABLES
