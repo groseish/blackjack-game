@@ -56,6 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Variable to track balance at start of round for win/lose effect calculations
   let roundStartingBalance = 0;
 
+  // Global variable for the player's name.
+  // Try to load from localStorage in case they've already entered it.
+  let playerName = localStorage.getItem('playerName') || "";
+
   const suits = ['♠', '♥', '♦', '♣'];
   const values = [
       { name: 'A', value: [1, 11] },
@@ -94,20 +98,27 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   async function checkAndUpdateLeaderboard() {
-    if (balance < 501) return;
+    // Only check if the balance is at least 1000.
+    if (balance < 1000) return;
+    
+    // If playerName is not set, ask for it now and store it.
+    if (!playerName) {
+      playerName = prompt("Congratulations! You've made it to the leaderboard with a balance of $" + balance + "! Please enter your name:");
+      if (!playerName) playerName = "Anonymous";
+      localStorage.setItem('playerName', playerName);
+    }
     
     const leaderboard = await fetchLeaderboard();
     let lowestScore = leaderboard.length < 10 ? 0 : leaderboard[leaderboard.length - 1].balance;
     
     if (leaderboard.length < 10 || balance > lowestScore) {
-      let name = prompt("Congratulations! You've made it to the leaderboard with a balance of $" + balance + "! Please enter your name:");
-      if (!name) name = "Anonymous";
       try {
         await addDoc(collection(db, "leaderboard"), {
-          name: name,
+          name: playerName,
           balance: balance,
           timestamp: serverTimestamp()
         });
+        alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`);
         await fetchLeaderboard();
       } catch (error) {
         console.error("Error updating leaderboard:", error);
@@ -641,7 +652,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const tapMessage = document.createElement('div');
     tapMessage.className = 'tap-message';
-    tapMessage.innerText = 'You win!!!';
+    tapMessage.innerText = `${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`;
     overlay.appendChild(tapMessage);
     
     // When the overlay is tapped, remove it
