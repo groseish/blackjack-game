@@ -704,8 +704,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const tapMessage = document.createElement('div');
     tapMessage.className = 'tap-message';
     // Only show the alert message for subsequent high scores.
-    tapMessage.innerText = `${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`;
-    overlay.appendChild(tapMessage);
+    // tapMessage.innerText = `${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`;
+    tapMessage.innerText = `You win!!!`;
+	overlay.appendChild(tapMessage);
     
     // When the overlay is tapped, remove it
     overlay.addEventListener('click', () => {
