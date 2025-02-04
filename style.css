@@ -223,11 +223,8 @@ body {
 #controls {
   margin-top: 18px;
 }
-#controls .control-row {
-  margin-bottom: 8px;
-}
 
-/* Spread out the first row (Deal, Hit, Stand) */
+/* --- First Row: Deal, Hit, Stand --- */
 #row-one {
   display: flex;
   justify-content: space-between;
@@ -240,10 +237,11 @@ body {
   margin: 2px;
 }
 
-/* Style the second row (Double Down and Split) to match mobile sizing */
+/* --- Second Row: Double Down and Split --- */
+/* Use a pseudo-element to add a dummy third item so that both rows have three items */
 #row-two {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   gap: 10px;
 }
 #row-two button {
@@ -251,6 +249,10 @@ body {
   font-size: 12px;
   padding: 6px 8px;
   margin: 2px;
+}
+#row-two::after {
+  content: "";
+  flex: 1;
 }
 
 /* Global button styling (for non-responsive defaults) */
