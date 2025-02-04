@@ -570,15 +570,13 @@ document.addEventListener('DOMContentLoaded', function() {
       const newCard = drawCard();
       dealerHand.push(newCard);
       dealerScore = calculateScore(dealerHand);
-      const dealerCardsDiv = document.getElementById('dealer-cards');
-      const cardElement = createCardElement(newCard, false);
-      await animateCardDeal(cardElement, dealerCardsDiv, 0);
+      // Re-render the dealer's hand so that only one set of cards is shown.
+      await renderHands(false);
       document.getElementById('dealer-score').innerText = 'Score: ' + dealerScore;
+      // Optional: add a brief delay to allow the player to see the update.
+      await new Promise(resolve => setTimeout(resolve, 500));
     }
-	
-	setTimeout(() => {
-      determineWinners();
-	}, 500); // .5-second delay
+    determineWinners();
   }
   
   function determineWinners() {
@@ -607,21 +605,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Compute net change for the round.
     let net = balance - roundStartingBalance;
-    // Delay the win/lose effects so the player has time to see the dealer's final score.
-
     if (net > 0) {
-	  flashWinEffect();
+      flashWinEffect();
     } else if (net < 0) {
-	  flashLoseEffect();
+      flashLoseEffect();
     }
+    
     checkAndUpdateLeaderboard();
     setTimeout(() => {
-	  if (balance < minBet) {
-	    triggerGameOver();
-	  }
+      if (balance < minBet) {
+        triggerGameOver();
+      }
     }, 100);
   }
-  
   
   function checkForBlackjack() {
     let playerScore = calculateScore(playerHands[0]);
@@ -705,12 +701,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const tapMessage = document.createElement('div');
     tapMessage.className = 'tap-message';
-    // Only show the alert message for subsequent high scores.
     // tapMessage.innerText = `${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`;
     tapMessage.innerText = `You win!!!`;
     overlay.appendChild(tapMessage);
     
-    // When the overlay is tapped, remove it
     overlay.addEventListener('click', () => {
       overlay.remove();
     });
@@ -739,7 +733,6 @@ document.addEventListener('DOMContentLoaded', function() {
     tapMessage.innerText = 'Dealer wins...';
     overlay.appendChild(tapMessage);
     
-    // When the overlay is tapped, remove it
     overlay.addEventListener('click', () => {
       overlay.remove();
     });
@@ -754,7 +747,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.getElementById('toggle-leaderboard');
     const leaderboardContainer = document.getElementById('leaderboard-container');
     
-    // Show/hide leaderboard when toggle button is pressed
     toggleButton.addEventListener('click', function(e) {
       e.stopPropagation();
       if (window.getComputedStyle(leaderboardContainer).display === 'block') {
@@ -764,7 +756,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // Tap anywhere on the screen to hide the leaderboard if it is visible
     document.addEventListener('click', function(e) {
       if (window.getComputedStyle(leaderboardContainer).display === 'block') {
         if (!leaderboardContainer.contains(e.target) && e.target !== toggleButton) {
