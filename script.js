@@ -620,6 +620,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000); // 1-second delay
   }
   
+  
   function checkForBlackjack() {
     let playerScore = calculateScore(playerHands[0]);
     dealerScore = calculateScore(dealerHand);
