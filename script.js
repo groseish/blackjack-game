@@ -100,61 +100,65 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
 	async function checkAndUpdateLeaderboard() {
-	  // Prompt for player name if not already set
-	  if (!playerName) {
-		playerName = prompt(
-		  "Congratulations! You've achieved a high score with a balance of $" +
-			balance +
-			"! Please enter your name:"
-		);
-		if (!playerName) playerName = "Anonymous";
-		localStorage.setItem('playerName', playerName);
-		highScoreSubmittedOnce = false; // This is the first submission.
-	  }
-	  
 	  // Fetch the leaderboard (this query already orders descending and limits to 10)
 	  const leaderboard = await fetchLeaderboard();
 	  
-	  // If fewer than 10 scores are showing, add the new score unconditionally.
-	  if (leaderboard.length < 10) {
-		try {
-		  await addDoc(collection(db, "leaderboard"), {
-			name: playerName,
-			balance: balance,
-			timestamp: serverTimestamp()
-		  });
-		  if (highScoreSubmittedOnce) {
-			alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard! test1`);
-		  } else {
-			highScoreSubmittedOnce = true;
-		  }
-		  await fetchLeaderboard();
-		} catch (error) {
-		  console.error("Error updating leaderboard:", error);
-		}
-	  } else {
-		// Since the leaderboard query returns the top 10 (sorted descending),
-		// the last entry in the array is the lowest score currently showing.
-		const lowestShowing = leaderboard[leaderboard.length - 1].balance;
+	  // Since the leaderboard query returns the top 10 (sorted descending),
+	  // the last entry in the array is the lowest score currently showing.
+	  const lowestShowing = leaderboard[leaderboard.length - 1].balance;
+	  alert(`lowestShowing = ${lowestShowing}`);
+	  
+	  if (balance > lowestShowing) {
 		
-		// Only add a new score if the player's balance is higher than the lowest showing.
-		if (balance > lowestShowing) {
-		  try {
-			await addDoc(collection(db, "leaderboard"), {
-			  name: playerName,
-			  balance: balance,
-			  timestamp: serverTimestamp()
-			});
-			if (highScoreSubmittedOnce) {
-			  alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard! test2`);
-			} else {
-			  highScoreSubmittedOnce = true;
-			}
-			await fetchLeaderboard();
-		  } catch (error) {
-			console.error("Error updating leaderboard:", error);
+		  // Prompt for player name if not already set
+		  if (!playerName) {
+			playerName = prompt(
+			  "Congratulations! You've achieved a high score with a balance of $" +
+				balance +
+				"! Please enter your name:"
+			);
+			if (!playerName) playerName = "Anonymous";
+			localStorage.setItem('playerName', playerName);
+			highScoreSubmittedOnce = false; // This is the first submission.
 		  }
-		}
+		  
+		  
+		  
+		  // If fewer than 10 scores are showing, add the new score unconditionally.
+		  if (leaderboard.length < 10) {
+			try {
+			  await addDoc(collection(db, "leaderboard"), {
+				name: playerName,
+				balance: balance,
+				timestamp: serverTimestamp()
+			  });
+			  if (highScoreSubmittedOnce) {
+				alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard! test1`);
+			  } else {
+				highScoreSubmittedOnce = true;
+			  }
+			  await fetchLeaderboard();
+			} catch (error) {
+			  console.error("Error updating leaderboard:", error);
+			}
+		  } else {
+			// Only add a new score if the player's balance is higher than the lowest showing.
+			  try {
+				await addDoc(collection(db, "leaderboard"), {
+				  name: playerName,
+				  balance: balance,
+				  timestamp: serverTimestamp()
+				});
+				if (highScoreSubmittedOnce) {
+				  alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard! test2`);
+				} else {
+				  highScoreSubmittedOnce = true;
+				}
+				await fetchLeaderboard();
+			  } catch (error) {
+				console.error("Error updating leaderboard:", error);
+			  }
+		  }
 	  }
 	}
 
