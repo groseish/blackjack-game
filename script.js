@@ -617,7 +617,7 @@ document.addEventListener('DOMContentLoaded', function() {
           triggerGameOver();
         }
       }, 100);
-    }, 1000); // 1-second delay
+    }, 500); // .5-second delay
   }
   
   
