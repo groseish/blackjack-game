@@ -242,18 +242,6 @@ body {
   background-color: #666;
 }
 
-/* Hide the Save button */
-#save-button {
-display: none;
-}
-
-/* Center the Double Down and Split buttons in the second row */
-#row-two {
-display: flex;
-justify-content: center;
-gap: 10px; /* Adjust gap as needed */
-}
-
 /* Message Display – fixed height to reserve space and prevent layout jumps */
 #message {
   height: 40px;
@@ -438,6 +426,41 @@ gap: 10px; /* Adjust gap as needed */
   margin-top: 20px;
 }
 
+/* Always hide the Save button and style the second row of controls */
+#save-button {
+  display: none;
+}
+
+#row-two {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+#row-two button {
+  flex: 1;
+  font-size: 12px;
+  padding: 6px 8px;
+  margin: 2px;
+}
+
+/* Style for the Bet MAX button in the betting area */
+#betting-area #bet-max-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #444;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease-out;
+}
+
+#betting-area #bet-max-button:hover {
+  background-color: #666;
+}
+
 /* Responsive Design for Mobile */
 @media (max-width: 768px) {
   body {
@@ -541,38 +564,6 @@ gap: 10px; /* Adjust gap as needed */
     padding: 8px;
     display: none;  /* Hide leaderboard by default on mobile */
   }
-  
-  /* Hide the Save button */
-  #save-button {
-    display: none;
-  }
-
-  /* Center the Double Down and Split buttons in the second row */
-  #row-two {
-    display: flex;
-    justify-content: center;
-    gap: 10px; /* Adjust gap as needed */
-  }
-
-	/* Style for the Bet MAX button in the betting area */
-	#betting-area #bet-max-button {
-	  padding: 6px 12px;
-	  font-size: 14px;
-	  margin-left: 10px;
-	  border: none;
-	  border-radius: 5px;
-	  background-color: #444;
-	  color: white;
-	  cursor: pointer;
-	  transition: background-color 0.2s ease-out;
-	}
-
-#betting-area #bet-max-button:hover {
-  background-color: #666;
-}
-
-
-
 }
 
 @media (min-width: 769px) {
