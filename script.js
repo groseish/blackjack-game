@@ -190,6 +190,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // =====================================================
   function updateBalance() {
     document.getElementById('balance').innerText = balance;
+    // Update bet input max attribute based on balance or 500, whichever is lower.
+    document.getElementById('bet-amount').max = Math.min(500, balance);
   }
   
   function clickButton(buttonId) {
@@ -209,10 +211,11 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function updateBetAmount(change) {
     currentBet += change;
+    let maxAllowed = Math.min(500, balance);
     if (currentBet < 5) {
       currentBet = 5;
-    } else if (currentBet > balance) {
-      currentBet = balance;
+    } else if (currentBet > maxAllowed) {
+      currentBet = maxAllowed;
     }
     document.getElementById('bet-amount').value = currentBet;
   }
@@ -340,16 +343,20 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function startGame() {
     console.log("startGame called");
+    // Read bet from input
     betAmount = parseInt(document.getElementById('bet-amount').value);
     console.log("betAmount:", betAmount);
     if (isNaN(betAmount) || betAmount < minBet) {
       alert(`Minimum bet is $${minBet}.`);
       return;
     }
-    if (betAmount > balance) {
-      betAmount = balance;
+    // Enforce maximum bet limit based on 500 or current balance
+    let maxAllowed = Math.min(500, balance);
+    if (betAmount > maxAllowed) {
+      betAmount = maxAllowed;
       document.getElementById('bet-amount').value = betAmount;
     }
+    
     if (deck.length < fullDeckCount * 52 * 0.25) { 
       createDeck();
     }
@@ -570,13 +577,15 @@ document.addEventListener('DOMContentLoaded', function() {
       const newCard = drawCard();
       dealerHand.push(newCard);
       dealerScore = calculateScore(dealerHand);
-      // Re-render the dealer's hand so that only one set of cards is shown.
-      await renderHands(false);
+      const dealerCardsDiv = document.getElementById('dealer-cards');
+      const cardElement = createCardElement(newCard, false);
+      await animateCardDeal(cardElement, dealerCardsDiv, 0);
       document.getElementById('dealer-score').innerText = 'Score: ' + dealerScore;
-      // Optional: add a brief delay to allow the player to see the update.
-      await new Promise(resolve => setTimeout(resolve, 500));
     }
-    determineWinners();
+	
+	setTimeout(() => {
+      determineWinners();
+	}, 500); // .5-second delay
   }
   
   function determineWinners() {
@@ -605,19 +614,21 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Compute net change for the round.
     let net = balance - roundStartingBalance;
+    // Delay the win/lose effects so the player has time to see the dealer's final score.
+
     if (net > 0) {
-      flashWinEffect();
+	  flashWinEffect();
     } else if (net < 0) {
-      flashLoseEffect();
+	  flashLoseEffect();
     }
-    
     checkAndUpdateLeaderboard();
     setTimeout(() => {
-      if (balance < minBet) {
-        triggerGameOver();
-      }
+	  if (balance < minBet) {
+	    triggerGameOver();
+	  }
     }, 100);
   }
+  
   
   function checkForBlackjack() {
     let playerScore = calculateScore(playerHands[0]);
@@ -701,10 +712,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const tapMessage = document.createElement('div');
     tapMessage.className = 'tap-message';
-    // tapMessage.innerText = `${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`;
     tapMessage.innerText = `You win!!!`;
     overlay.appendChild(tapMessage);
     
+    // When the overlay is tapped, remove it
     overlay.addEventListener('click', () => {
       overlay.remove();
     });
@@ -733,6 +744,7 @@ document.addEventListener('DOMContentLoaded', function() {
     tapMessage.innerText = 'Dealer wins...';
     overlay.appendChild(tapMessage);
     
+    // When the overlay is tapped, remove it
     overlay.addEventListener('click', () => {
       overlay.remove();
     });
@@ -747,6 +759,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.getElementById('toggle-leaderboard');
     const leaderboardContainer = document.getElementById('leaderboard-container');
     
+    // Show/hide leaderboard when toggle button is pressed
     toggleButton.addEventListener('click', function(e) {
       e.stopPropagation();
       if (window.getComputedStyle(leaderboardContainer).display === 'block') {
@@ -756,6 +769,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
+    // Tap anywhere on the screen to hide the leaderboard if it is visible
     document.addEventListener('click', function(e) {
       if (window.getComputedStyle(leaderboardContainer).display === 'block') {
         if (!leaderboardContainer.contains(e.target) && e.target !== toggleButton) {
@@ -778,10 +792,11 @@ document.addEventListener('DOMContentLoaded', function() {
     alert("Game saved! Your balance of $" + balance + " has been saved.");
   });
   
-  // NEW: Bet MAX button event listener
+  // Updated: Bet MAX button event listener uses the cap of $500 or the current balance.
   document.getElementById('bet-max-button').addEventListener('click', function() {
-    currentBet = balance;
-    document.getElementById('bet-amount').value = balance;
+    let maxBet = Math.min(500, balance);
+    currentBet = maxBet;
+    document.getElementById('bet-amount').value = maxBet;
   });
   
   updateBalance();

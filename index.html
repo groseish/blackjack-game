@@ -36,7 +36,8 @@
 	
 	<div id="betting-area">
 	  <label for="bet-amount">Bet Amount ($5 minimum): </label>
-	  <input type="number" id="bet-amount" value="5" min="5" step="5">
+	  <!-- Set the initial max to 500. The JS will update this if the balance drops below 500 -->
+	  <input type="number" id="bet-amount" value="5" min="5" max="500" step="5">
 	  <button id="bet-max-button">Bet MAX</button>
 	</div>
 
@@ -78,7 +79,7 @@
   
   <!-- Subtle keyboard shortcuts hint -->
   <p id="keyboard-shortcuts-hint" style="font-size: 12px; opacity: 0.7;">
-    Hold 'Q' to Display Keyboard Shortcuts - v1.34
+    Hold 'Q' to Display Keyboard Shortcuts - v1.38
   </p>
   
   <!-- Shuffling Animation Overlay -->
