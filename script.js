@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // =====================================================
   // INITIAL SETUP & GLOBAL VARIABLES
   // =====================================================
-  let balance = 500;
+  let balance = 50;
   if (localStorage.getItem('playerBalance') !== null) {
     balance = parseInt(localStorage.getItem('playerBalance'), 10);
   }
