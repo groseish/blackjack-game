@@ -102,36 +102,24 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   async function checkAndUpdateLeaderboard() {
-    // Fetch the leaderboard (this query orders descending and limits to 10)
     const leaderboard = await fetchLeaderboard();
     console.log("DEBUG: Fetched leaderboard:", leaderboard);
     console.log("DEBUG: Current balance:", balance);
     console.log("DEBUG: Leaderboard length:", leaderboard.length);
 
-    // If the leaderboard is full (i.e., 10 entries) then compare the player's balance
     if (leaderboard.length === 10) {
       const lowestShowing = leaderboard[leaderboard.length - 1].balance;
       console.log("DEBUG: Lowest showing on leaderboard:", lowestShowing);
-
-      // If the player's balance is not greater than the lowest score showing, do nothing.
       if (balance <= lowestShowing) {
-        console.log(
-          `DEBUG: Balance (${balance}) is not high enough to beat the lowest showing (${lowestShowing}). No update will occur.`
-        );
+        console.log(`DEBUG: Balance (${balance}) is not high enough to beat the lowest showing (${lowestShowing}). No update will occur.`);
         return;
       } else {
-        console.log(
-          `DEBUG: Balance (${balance}) qualifies (greater than ${lowestShowing}). Proceeding with high score update.`
-        );
+        console.log(`DEBUG: Balance (${balance}) qualifies (greater than ${lowestShowing}). Proceeding with high score update.`);
       }
     } else {
       console.log("DEBUG: Leaderboard is not full (length is less than 10).");
     }
 
-    // At this point, either the leaderboard is not full
-    // or the player's balance is higher than the lowest high score.
-
-    // Prompt for the player's name (only if it hasn't been set already)
     if (!playerName) {
       console.log("DEBUG: Player name is not set. Prompting for player name...");
       playerName = prompt(
@@ -144,16 +132,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       console.log("DEBUG: Player name set to:", playerName);
       localStorage.setItem("playerName", playerName);
-      highScoreSubmittedOnce = false; // This marks the first submission.
+      highScoreSubmittedOnce = false;
     } else {
       console.log("DEBUG: Player name is already set:", playerName);
     }
 
-    // Add the player's score to the leaderboard
     try {
-      console.log(
-        `DEBUG: Adding new high score. (Player: ${playerName}, Balance: ${balance})`
-      );
+      console.log(`DEBUG: Adding new high score. (Player: ${playerName}, Balance: ${balance})`);
       await addDoc(collection(db, "leaderboard"), {
         name: playerName,
         balance: balance,
@@ -161,9 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       if (highScoreSubmittedOnce) {
         console.log("DEBUG: High score already submitted before, triggering alert.");
-        alert(
-          `${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`
-        );
+        alert(`${playerName} got another high score with a balance of $${balance}! Check out the leaderboard!`);
       } else {
         highScoreSubmittedOnce = true;
       }
@@ -190,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // =====================================================
   function updateBalance() {
     document.getElementById('balance').innerText = balance;
-    // Update bet input max attribute based on balance or 500, whichever is lower.
+    // Set the bet input's maximum to 500 (if balance is higher) or to balance if less.
     document.getElementById('bet-amount').max = Math.min(500, balance);
   }
   
@@ -585,7 +568,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	setTimeout(() => {
       determineWinners();
-	}, 500); // .5-second delay
+	}, 500);
   }
   
   function determineWinners() {
@@ -612,10 +595,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('deal-button').disabled = false;
     document.getElementById('bet-amount').disabled = false;
     
-    // Compute net change for the round.
     let net = balance - roundStartingBalance;
-    // Delay the win/lose effects so the player has time to see the dealer's final score.
-
     if (net > 0) {
 	  flashWinEffect();
     } else if (net < 0) {
@@ -628,7 +608,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	  }
     }, 100);
   }
-  
   
   function checkForBlackjack() {
     let playerScore = calculateScore(playerHands[0]);
@@ -696,13 +675,11 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // NEW WIN OVERLAY Function:
   function flashWinEffect() {
-    // Create persistent win overlay filled with money bag emojis
     const overlay = document.createElement('div');
     overlay.className = 'win-overlay';
     
     const emojiContainer = document.createElement('div');
     emojiContainer.className = 'emoji-container';
-    // Fill with several money bag emojis (e.g., 30 copies)
     for (let i = 0; i < 30; i++) {
       const span = document.createElement('span');
       span.innerText = '💰';
@@ -715,7 +692,6 @@ document.addEventListener('DOMContentLoaded', function() {
     tapMessage.innerText = `You win!!!`;
     overlay.appendChild(tapMessage);
     
-    // When the overlay is tapped, remove it
     overlay.addEventListener('click', () => {
       overlay.remove();
     });
@@ -725,13 +701,11 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // NEW LOSE OVERLAY Function:
   function flashLoseEffect() {
-    // Create persistent lose overlay filled with giant red X's
     const overlay = document.createElement('div');
     overlay.className = 'lose-overlay';
     
     const emojiContainer = document.createElement('div');
     emojiContainer.className = 'emoji-container';
-    // Fill with several red X's (e.g., 20 copies)
     for (let i = 0; i < 20; i++) {
       const span = document.createElement('span');
       span.innerText = '❌';
@@ -744,7 +718,6 @@ document.addEventListener('DOMContentLoaded', function() {
     tapMessage.innerText = 'Dealer wins...';
     overlay.appendChild(tapMessage);
     
-    // When the overlay is tapped, remove it
     overlay.addEventListener('click', () => {
       overlay.remove();
     });
@@ -759,7 +732,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const toggleButton = document.getElementById('toggle-leaderboard');
     const leaderboardContainer = document.getElementById('leaderboard-container');
     
-    // Show/hide leaderboard when toggle button is pressed
     toggleButton.addEventListener('click', function(e) {
       e.stopPropagation();
       if (window.getComputedStyle(leaderboardContainer).display === 'block') {
@@ -769,7 +741,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // Tap anywhere on the screen to hide the leaderboard if it is visible
     document.addEventListener('click', function(e) {
       if (window.getComputedStyle(leaderboardContainer).display === 'block') {
         if (!leaderboardContainer.contains(e.target) && e.target !== toggleButton) {
@@ -792,11 +763,21 @@ document.addEventListener('DOMContentLoaded', function() {
     alert("Game saved! Your balance of $" + balance + " has been saved.");
   });
   
-  // Updated: Bet MAX button event listener uses the cap of $500 or the current balance.
+  // Updated BET MAX button event handler: always cap bet at $500 (or less if balance is lower)
   document.getElementById('bet-max-button').addEventListener('click', function() {
     let maxBet = Math.min(500, balance);
     currentBet = maxBet;
     document.getElementById('bet-amount').value = maxBet;
+  });
+  
+  // Enforce the bet input's maximum value if the user types in a number manually.
+  document.getElementById('bet-amount').addEventListener('change', function() {
+    let enteredBet = parseInt(this.value, 10);
+    let maxAllowed = Math.min(500, balance);
+    if (enteredBet > maxAllowed) {
+      this.value = maxAllowed;
+      currentBet = maxAllowed;
+    }
   });
   
   updateBalance();
